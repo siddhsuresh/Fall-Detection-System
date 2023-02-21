@@ -24,11 +24,11 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/auth": "2.0.0-beta.23",
-    "@blitzjs/next": "2.0.0-beta.23",
-    "@blitzjs/rpc": "2.0.0-beta.23",
+    "@blitzjs/auth": "next--multiple-fields",
+    "@blitzjs/next": "next--multiple-fields",
+    "@blitzjs/rpc": "next--multiple-fields",
     "@prisma/client": "4.6.0",
-    "blitz": "2.0.0-beta.23",
+    "blitz": "next--multiple-fields",
     "next": "13.1",
     "prisma": "4.6.0",
     "react": "18.2.0",

@@ -1,3 +1,4 @@
+import time
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 import joblib
@@ -53,8 +54,11 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
         test_features = await websocket.receive_text()
-        test = [1.15041235, 0.94879958, 5.50766259, 1.39958032, 1.02742593,
-       2.95343321, 2.19231136, 1.71787736]
+        test = [[1.15041235, 0.94879958, 5.50766259, 1.39958032, 1.02742593,
+       2.95343321, 2.19231136, 1.71787736]]
+        time_start = time.time()
         predictions = model.predict(test)
-        print(predictions)
+        time_end = time.time()
+        print("Time taken to predict: " + str(time_end - time_start))
+        print("Predicted Result: ", predictions)
         await websocket.send_text(f"Message text was: {predictions}")

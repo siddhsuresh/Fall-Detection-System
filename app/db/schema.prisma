@@ -63,3 +63,30 @@ model Token {
 // enum TokenType {
 //   RESET_PASSWORD
 // }
+
+model Falldetector {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  accuracyMaximum  Float
+  gyroMaximum      Float
+  accuracyKurtosis Float
+  gyroKurtosis     Float
+  linMar           Float
+  accuracySkewness Float
+  gyroSkewness     Float
+  postGyroMaximum  Float
+  postLinMaximum   Float
+}
+
+model Sensor {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  accX      Float
+  accY      Float
+  accZ      Float
+  gyroX     Float
+  gyroY     Float
+  gyroZ     Float
+}
