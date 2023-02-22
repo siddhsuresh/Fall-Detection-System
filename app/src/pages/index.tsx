@@ -1,28 +1,16 @@
-import { Suspense, useEffect } from "react"
+import { Suspense } from "react"
 import Link from "next/link"
-import Layout from "src/core/layouts/Layout"
 import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import logout from "src/auth/mutations/logout"
 import { useMutation } from "@blitzjs/rpc"
-import { Routes, BlitzPage } from "@blitzjs/next"
+import { Routes } from "@blitzjs/next"
 import styles from "src/styles/Home.module.css"
-import { useWS } from "src/websockets"
-
-/*
- * This file is just for a pleasant getting started page for your new app.
- * You can delete everything in here and start from scratch if you like.
- */
+import Image from "next/image"
+import Head from "next/head"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
-  const ws = useWS()
   const [logoutMutation] = useMutation(logout)
-  useEffect(() => {
-    console.log(ws)
-    ws.onmessage = (event) => {
-      console.log(event)
-    }
-  }, [])
 
   if (currentUser) {
     return (
@@ -56,148 +44,261 @@ const UserInfo = () => {
   }
 }
 
-const Home: BlitzPage = () => {
+export default function Index() {
   return (
-    <Layout title="Home">
-      <div className={styles.globe} />
-
-      <div className={styles.container}>
-        <div className={styles.toastContainer}>
-          <p>
-            <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
-          </p>
-        </div>
-
-        <main className={styles.main}>
-          <div className={styles.wrapper}>
-            <div className={styles.header}>
-              <div className={styles.logo}>
-                <svg viewBox="0 0 165 66">
-                  <path d="M104.292 56.033C104.292 56.408 104.206 56.6636 104.036 56.8C103.9 56.9363 103.627 57.0045 103.218 57.0045H99.7409C99.4001 57.0045 99.1615 56.9533 99.0251 56.8511C98.8888 56.7147 98.8206 56.4932 98.8206 56.1864L98.9229 19.8324C98.9229 19.3211 99.1444 19.0654 99.5876 19.0654H103.627C103.839 19.0654 104.292 19.0672 104.292 19.0672V19.8324V56.033ZM64.3531 57.0081C64.1145 57.0081 63.927 56.9399 63.7906 56.8035C63.6543 56.6672 63.5861 56.4968 63.5861 56.2922V19.9383C63.5861 19.3588 63.8588 19.069 64.4042 19.069H76.829C81.533 19.069 85.1463 19.9212 87.6687 21.6256C90.1912 23.2958 91.4524 25.7331 91.4524 28.9373C91.4524 30.9484 90.924 32.6528 89.8673 34.0504C88.8106 35.4138 87.1063 36.5217 84.7543 37.3739C84.6179 37.4079 84.5497 37.4932 84.5497 37.6295C84.5497 37.7318 84.6179 37.7999 84.7543 37.834C87.2767 38.5158 89.1686 39.5895 90.4298 41.0553C91.7251 42.521 92.3727 44.4469 92.3727 46.833C92.3727 50.2418 91.0945 52.7983 88.5379 54.5027C85.9814 56.1729 82.2318 57.0081 77.2892 57.0081H64.3531ZM77.5448 35.5843C79.6923 35.5843 81.516 35.1071 83.0158 34.1526C84.5157 33.1982 85.2656 31.6983 85.2656 29.6531C85.2656 27.6079 84.5157 26.0569 83.0158 25.0002C81.5501 23.9435 79.5219 23.4151 76.9313 23.4151H70.5399C70.0286 23.4151 69.7729 23.6367 69.7729 24.0798V34.8684C69.7729 35.3457 69.9604 35.5843 70.3354 35.5843H77.5448ZM77.0335 52.662C82.9647 52.662 85.9303 50.5997 85.9303 46.4751C85.9303 44.3276 85.1633 42.7255 83.6294 41.6688C82.0955 40.6121 80.0673 40.0838 77.5448 40.0838H70.591C70.2843 40.0838 70.0627 40.1349 69.9263 40.2372C69.8241 40.3394 69.7729 40.5099 69.7729 40.7485V51.895C69.7729 52.4063 69.9604 52.662 70.3354 52.662H77.0335ZM142.707 56.8624C142.81 56.9647 142.997 57.0158 143.27 57.0158H163.876C164.387 57.0158 164.643 56.7772 164.643 56.3V53.948V53.3344H163.978H149.866C149.593 53.3344 149.457 53.2492 149.457 53.0788C149.457 52.9765 149.508 52.8572 149.61 52.7208L163.876 33.8536C164.251 33.2741 164.438 32.7628 164.438 32.3197V30.479V29.9144C164.438 29.9144 164.051 29.9165 163.876 29.9165H144.241C143.866 29.9165 143.679 30.121 143.679 30.5301V32.831C143.679 33.1037 143.713 33.2911 143.781 33.3934C143.883 33.4957 144.071 33.5468 144.344 33.5468H157.075C157.382 33.5468 157.535 33.632 157.535 33.8025L157.382 34.1092L143.219 52.9765C142.946 53.3515 142.759 53.6412 142.656 53.8457C142.588 54.0502 142.554 54.3059 142.554 54.6127V56.3C142.554 56.5727 142.605 56.7602 142.707 56.8624ZM116.929 19.0676H111.51V27.7684C114.503 27.7684 116.929 25.3419 116.929 22.3486V19.0676ZM116.926 56.0308C116.926 56.4058 116.841 56.6614 116.67 56.7978C116.534 56.9341 116.278 57.0023 115.903 57.0023H112.427C112.086 57.0023 111.847 56.9512 111.711 56.8489C111.574 56.7126 111.506 56.491 111.506 56.1842V30.6699C111.506 30.3972 111.557 30.2098 111.66 30.1075C111.762 29.9712 111.949 29.903 112.222 29.903H117.028L116.926 56.0308ZM132.183 34.3137C132.183 33.9728 132.336 33.8024 132.643 33.8024H138.779C139.256 33.8024 139.495 33.5979 139.495 33.1888V30.4789V29.9165H138.881H132.745C132.439 29.9165 132.285 29.7631 132.285 29.4563V21.531V20.713L131.621 20.7129H128.093C127.752 20.7129 127.547 20.9515 127.479 21.4288L126.865 29.4563C126.865 29.7631 126.729 29.9165 126.456 29.9165H122.366C121.957 29.9165 121.752 30.1039 121.752 30.4789V33.1888C121.752 33.5979 121.974 33.8024 122.417 33.8024H126.252C126.593 33.8024 126.763 34.0069 126.763 34.416V50.6244C126.763 52.806 127.309 54.4252 128.399 55.4819C129.49 56.5045 131.16 57.0158 133.41 57.0158C135.796 57.0158 137.535 56.9306 138.625 56.7601C139.137 56.6579 139.392 56.3681 139.392 55.8909V53.6923V53.0787H138.779H135.507C134.348 53.0787 133.495 52.806 132.95 52.2606C132.439 51.7152 132.183 50.7267 132.183 49.295V34.3137Z"></path>
-                  <path d="M0.241243 33.2639H10.9742C15.0585 33.2639 18.9054 35.1835 21.3612 38.4471L31.9483 52.5165C32.1484 52.7824 32.1786 53.1393 32.026 53.435L25.9232 65.2592C25.6304 65.8265 24.8455 65.8932 24.4612 65.3835L0.241243 33.2639Z"></path>
-                  <path d="M42.4727 33.2822H31.7398C27.6555 33.2822 23.8086 31.3626 21.3528 28.0991L10.7656 14.0297C10.5656 13.7638 10.5354 13.4068 10.688 13.1111L16.7908 1.28696C17.0836 0.719654 17.8684 0.652924 18.2528 1.16266L42.4727 33.2822Z"></path>
+    <div className={styles.container}>
+      <Head>
+        <title>CSE3076 | Home</title>
+      </Head>
+      <div className="relative h-full overflow-hidden md:pt-24">
+        <div className="absolute inset-0 opacity-25"></div>
+        <div className="container relative z-10 mx-auto my-24 flex w-4/5 items-center rounded-lg border-4 border-white py-16 md:my-32">
+          <div className="relative z-10 flex w-full flex-col items-center justify-between gap-4">
+            <p className="flex flex-col items-center text-center text-6xl font-semibold md:text-8xl pb-4">
+              Fall Detection System
+            </p>
+            <p className="mt-6 flex max-w-lg flex-col items-center text-center text-xl font-semibold ">
+              CSE3076 Context Aware Computing <br />J Component
+            </p>
+            <Suspense fallback={<div>Loading...</div>}>
+              <UserInfo />
+            </Suspense>
+            <p className="mt-6 flex max-w-lg flex-col items-center text-center text-3xl font-semibold">
+              Presented By <br />
+              <div className="p-5 flex flex-row items-center justify-center gap-4 w-full font-bold">
+                <p className="text-xl">Siddharth Suresh 20BPS1042</p>
+                <p className="text-xl">Prantik Dhara 20BPS1083</p>
+                <p className="text-xl">Kanishka Ghosh 20BPS1125</p>
+                <p className="text-xl">Siddharth <br/> M 20BPS1007</p>
+              </div>
+            </p>
+            <div className="p-5 flex flex-row gap-5 w-xl justify-between">
+              <button
+                type="button"
+                className="shadow-white/50 py-2 px-4 flex justify-center items-center  bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.05)",
+                  backdropFilter: "blur(5px)",
+                  borderRadius: "20px",
+                }}
+                onClick={() => {
+                  window.open(
+                    "https://github.com/siddhsuresh/Cloud-Project-Frontend"
+                  );
+                }}
+              >
+                <svg
+                  width="30"
+                  height="30"
+                  fill="currentColor"
+                  className="mr-2"
+                  viewBox="0 0 1792 1792"
+                >
+                  <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
                 </svg>
-              </div>
-
-              <h1>Your database & authentication is ready. Try it by signing up.</h1>
-
-              {/* Auth */}
-
-              <div className={styles.buttonContainer}>
-                <Suspense fallback="Loading...">
-                  <UserInfo />
-                </Suspense>
-              </div>
-            </div>
-
-            <div className={styles.body}>
-              {/* Instructions */}
-              <div className={styles.instructions}>
-                <p>
-                  <strong>Add a new model by running the following in your terminal:</strong>
-                </p>
-
-                <div>
-                  <div className={styles.code}>
-                    <span>1</span>
-                    <pre>
-                      <code>blitz generate all project</code>
-                    </pre>
-                  </div>
-
-                  <div className={styles.code}>
-                    <span>2</span>
-                    <pre>
-                      <code>Ctrl + c</code>
-                    </pre>
-                  </div>
-
-                  <div className={styles.code}>
-                    <span>3</span>
-                    <pre>
-                      <code>blitz dev</code>
-                    </pre>
-                  </div>
-
-                  <div className={styles.code}>
-                    <span>4</span>
-                    <pre>
-                      <code>
-                        Go to{" "}
-                        <Link href="/projects" className={styles.textLink}>
-                          /projects
-                        </Link>
-                      </code>
-                    </pre>
-                  </div>
-                </div>
-              </div>
-              {/* Links */}
-              <div className={styles.linkGrid}>
-                <a
-                  href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.card}
+                Frond End Code
+              </button>
+              <button
+                type="button"
+                className="shadow-white/50 py-2 px-4 flex justify-center items-center  bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.05)",
+                  backdropFilter: "blur(5px)",
+                  borderRadius: "20px",
+                }}
+                onClick={() => {
+                  window.open(
+                    "https://github.com/siddhsuresh/Cloud-Project-Backend"
+                  );
+                }}
+              >
+                <svg
+                  width="30"
+                  height="30"
+                  fill="currentColor"
+                  className="mr-2"
+                  viewBox="0 0 1792 1792"
                 >
-                  Blitz Docs
-                  <span className={styles.arrowIcon} />
-                </a>
-                <a
-                  href="https://nextjs.org/docs/getting-started"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.card}
-                >
-                  Next.js Docs
-                  <span className={styles.arrowIcon} />
-                </a>
-                <a
-                  href="https://github.com/blitz-js/blitz"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.card}
-                >
-                  Github Repo
-                  <span className={styles.arrowIcon} />
-                </a>
-                <a
-                  href="https://twitter.com/blitz_js"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.card}
-                >
-                  Blitz Twitter
-                  <span className={styles.arrowIcon} />
-                </a>
-                <a
-                  href="https://discord.blitzjs.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.card}
-                >
-                  Discord Community
-                  <span className={styles.arrowIcon} />
-                </a>
-              </div>
+                  <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
+                </svg>
+                API & Microcontroller Code
+              </button>
             </div>
           </div>
-        </main>
-
-        <footer className={styles.footer}>
-          <span>Powered by</span>
-          <a
-            href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.textLink}
-          >
-            Blitz.js
-          </a>
-        </footer>
+        </div>
       </div>
-    </Layout>
-  )
+      <section>
+        <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
+          <div className="max-w-xl">
+            <h2 className="text-4xl font-bold sm:text-6xl text-center sm:text-left">
+              Features
+            </h2>
+
+            <p className="mt-4 sm:text-xl">
+              Listing the various key aspects implemented for the working of the
+              fall detection system
+            </p>
+          </div>
+
+          <ul className="grid grid-cols-2 gap-10 mt-8 sm:grid-cols-4 lg:grid-cols-4">
+            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
+              backdropFilter : "blur(5px)"
+            }}>
+              <p className="text-3xl font-semibold">
+                Implemented the BackEnd API using FastAPI
+              </p>
+              <p className="mt-3 text-xl font-medium flex flex-row gap-4">
+                <svg
+                  width="27"
+                  height="30"
+                  viewBox="0 0 27 30"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>heroku-logo</title>
+                  <path
+                    d="M3 0C1.13 0 0 1.11 0 2.903v24.194C0 28.883 1.13 30 3 30h21c1.863 0 3-1.11 3-2.903V2.903C26.994 1.11 25.863 0 24 0H3zm21.042 2c.508.006.958.448.958.929V27.07c0 .487-.45.929-.958.929H2.958C2.45 28 2 27.558 2 27.071V2.93c0-.488.45-.93.958-.93h21.084zM20 25h-2.781v-8.506c0-.774-.237-1.048-.468-1.208-1.396-.959-5.414-.042-7.834.916L7 17.012 7.006 5h2.816v7.917a20.99 20.99 0 0 1 1.882-.482c2.988-.643 5.184-.47 6.616.505.787.536 1.68 1.59 1.68 3.554V25zm-6-15h3.293A16.109 16.109 0 0 0 20 5h-3.287c-.49 1.188-1.385 3.188-2.713 5zM7 25v-7l3 3.5L7 25z"
+                    fill="#79589f"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+                Hosted in Heroku
+              </p>
+            </li>
+
+            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
+              backdropFilter : "blur(5px)"
+            }}>
+              <p className="text-3xl font-semibold">
+                Implemented the Real Time <br />
+                Bi-Directional Connection
+              </p>
+              <p className="mt-3 text-xl font-medium flex flex-row gap-4">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 256 256"
+                  xmlns="http://www.w3.org/2000/svg"
+                  preserveAspectRatio="xMinYMin meet"
+                >
+                  <circle
+                    cx="128"
+                    cy="128"
+                    r="114"
+                    stroke="#010101"
+                    stroke-width="20"
+                    fill="#ffffff"
+                  />
+                  <path
+                    d="M97.637 121.69c27.327-22.326 54.058-45.426 81.98-67.097-14.646 22.505-29.708 44.711-44.354 67.215-12.562.06-25.123.06-37.626-.119zM120.737 134.132c12.621 0 25.183 0 37.745.179-27.505 22.206-54.117 45.484-82.099 67.096 14.646-22.505 29.708-44.77 44.354-67.275z"
+                    fill="#010101"
+                  />
+                </svg>
+                Using Web Socket Protocol
+              </p>
+            </li>
+            <div className="col-span-4 flex items-center justify-center">
+            <li className="p-8 shadow-2xl rounded-xl w-[50%]" style={{
+              backdropFilter : "blur(5px)"
+            }}>
+              <p className="text-3xl font-semibold">
+                Fall Classification Using Random Forest Machine Learning Algorithm
+              </p>
+              <p className="mt-3 text-xl font-medium flex flex-row gap-4">
+                Using scikit-learn and pandas libraries
+              </p>
+            </li>
+            </div>
+            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
+              backdropFilter : "blur(5px)"
+            }}>
+              <p className="text-3xl font-semibold">
+                Created This Website using Next.js and Blitz Toolkit
+              </p>
+              <p className="mt-3 text-xl font-medium flex flex-row gap-2">
+                Hosted in
+                <svg
+                  height="26"
+                  viewBox="0 0 284 65"
+                  aria-label="Vercel Logotype"
+                >
+                  <path d="M141.68 16.25c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.46 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm117.14-14.5c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.45 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm-39.03 3.5c0 6 3.92 10 10 10 4.12 0 7.21-1.87 8.8-4.92l7.68 4.43c-3.18 5.3-9.14 8.49-16.48 8.49-11.05 0-19-7.2-19-18s7.96-18 19-18c7.34 0 13.29 3.19 16.48 8.49l-7.68 4.43c-1.59-3.05-4.68-4.92-8.8-4.92-6.07 0-10 4-10 10zm82.48-29v46h-9v-46h9zM37.59.25l36.95 64H.64l36.95-64zm92.38 5l-27.71 48-27.71-48h10.39l17.32 30 17.32-30h10.39zm58.91 12v9.69c-1-.29-2.06-.49-3.2-.49-5.81 0-10 4-10 10v14.8h-9v-34h9v9.2c0-5.08 5.91-9.2 13.2-9.2z"></path>
+                </svg>
+              </p>
+            </li>
+
+            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
+              backdropFilter : "blur(5px)"
+            }}>
+              <p className="text-3xl font-semibold">
+                Written the Microcontroller Code using the Arduino Framework
+              </p>
+              <p className="mt-3 text-xl font-medium">
+                The Tasks in ESP32 is implemented using the ESP32 SDK{" "}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <aside className="p-5 relative lg:flex h-full">
+        <div className="w-full p-12 text-center lg:w-1/2 sm:p-16 lg:p-24 lg:text-left">
+          <div className="max-w-xl mx-auto lg:ml-0">
+            <p className="text-sm font-medium">
+              Circuit Visulisation using Fritzing Software
+            </p>
+
+            <p className="mt-2 text-2xl font-bold sm:text-4xl">
+              Visualising the ESP32 Circuit
+            </p>
+
+            <p className="lg:mt-4 block text-lg">
+              The Components connected to the ESP32 Microcontroller is MPU6050 Accerometer and Gyroscope
+            </p>
+          </div>
+        </div>
+
+        <div className="relative w-full h-64 sm:h-96 lg:w-1/2 lg:h-auto rounded-lg">
+          <Image
+            src="/1.png"
+            alt="ESP8266 Connection"
+            className="p-1 rounded-xl absolute inset-0 object-scale-down w-full h-full hover:scale-105 ease-in-out duration-300"
+            layout="fill"
+          />
+        </div>
+      </aside>
+      <style jsx global>
+        {`
+          .buttons {
+            display: grid;
+            grid-auto-flow: column;
+            grid-gap: 0.5rem;
+          }
+          .button {
+            font-size: 1rem;
+            background-color: #6700eb;
+            padding: 1rem 2rem;
+            color: #f4f4f4;
+            text-align: center;
+          }
+          .button.small {
+            padding: 0.5rem 1rem;
+          }
+          .button:hover {
+            background-color: #45009d;
+          }
+          .button-outline {
+            border: 2px solid #6700eb;
+            padding: 1rem 2rem;
+            color: #6700eb;
+            text-align: center;
+          }
+          .button-outline:hover {
+            border-color: #45009d;
+            color: #45009d;
+          }
+        `}
+      </style>
+    </div>
+  );
 }
 
-export default Home
+Index.suppressFirstRenderFlicker = true;

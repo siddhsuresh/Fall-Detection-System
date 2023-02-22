@@ -14,7 +14,7 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
 }
 
 export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({ label, outerProps, labelProps, name, ...props }, ref) => {
+  ({ label, outerProps, labelProps, name, type, ...props }, ref) => {
     const {
       register,
       formState: { isSubmitting, errors },
@@ -24,7 +24,9 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
       <div {...outerProps}>
         <label {...labelProps}>
           {label}
-          <input disabled={isSubmitting} {...register(name)} {...props} />
+          <input disabled={isSubmitting} {...register(name, {
+            valueAsNumber: type === "number",
+          })} type={type}{...props} />
         </label>
 
         <ErrorMessage
