@@ -12,11 +12,11 @@
 // export const SensorsList = () => {
 //   const router = useRouter()
 //   const page = Number(router.query.page) || 0
-//   const [{ sensors, hasMore }] = usePaginatedQuery(getSensors, {
-//     orderBy: { id: "asc" },
-//     skip: ITEMS_PER_PAGE * page,
-//     take: ITEMS_PER_PAGE,
-//   })
+  // const [{ sensors, hasMore }] = usePaginatedQuery(getSensors, {
+  //   orderBy: { id: "asc" },
+  //   skip: ITEMS_PER_PAGE * page,
+  //   take: ITEMS_PER_PAGE,
+  // })
 
 //   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
 //   const goToNextPage = () => router.push({ query: { page: page + 1 } })
@@ -194,6 +194,7 @@ const UserInfo = () => {
 }
 
 export default function Example() {
+
   return (
     <Card>
       <Suspense fallback="Loading...">

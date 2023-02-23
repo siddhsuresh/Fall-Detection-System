@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IWP Review 02</title>
+  </head>
+  <body>
+    <h3>Current User</h3>
+    <pre><%= user %></pre>
+    <button id="login" onclick="login()">Login</button>
+    <button id="logout" onclick="logout()">Logout</button>
+    <button id="signup" onclick="signup()">Signup</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      // form.addEventListener("submit", function (e) {
+      //   e.preventDefault();
+      //   if (input.value) {
+      //     socket.emit("chat message", input.value);
+      //     input.value = "";
+      //   }
+      // });
+
+      socket.on("chat message", function (msg) {
+        var item = document.createElement("li");
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      async function signup() {
+        const csrfToken = "<%= csrfToken %>";
+        const user = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "anti-csrf": csrfToken,
+          },
+          body: JSON.stringify({
+            email: "test@test.com",
+            password: "test123",
+          }),
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+
+      async function login() {
+        const csrfToken = "<%= csrfToken %>";
+        const user = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "anti-csrf": csrfToken,
+          },
+          body: JSON.stringify({
+            email: "test@test.com",
+            password: "test123",
+          }),
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+
+      async function logout() {
+        const csrfToken = "<%= csrfToken %>";
+
+        const user = await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "anti-csrf": csrfToken,
+          },
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    </script>
+  </body>
+</html>
