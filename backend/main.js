@@ -5,7 +5,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const auth = require('./router/auth')
 const AuthMiddleware = require('./blitz-server')
-const io = new Server(server); 
+const io = new Server(server);
+const db = require('./db')
 
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -31,13 +32,29 @@ const csrfToken = (req) => {
 app.get('/', (req, res) => {
     res.render('./index', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
 });
-
+ 
 app.get('/login', (req, res) => {
-    res.render('./login', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
+    const user = res.blitzCtx.session.$publicData
+    if (user.userId) {
+        res.redirect('/dashboard')
+    } else {
+        res.render('./login', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
+    }
 });
 
-app.get('/dashboard', (req, res) => {
-    res.render('./dashboard', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
+app.get('/dashboard', async (req, res) => {
+    const user = res.blitzCtx.session.$publicData
+    if (!user.userId) {
+        res.redirect('/login')
+    } else {
+        const _user = await db.user.findFirst({
+            where: {
+                id: user.userId
+            }
+        })
+        console.log(_user)
+        res.render('./dashboard', { user: user, cuser: _user, csrfToken: csrfToken(req) });
+    }
 });
 
 app.use('/api/auth', auth)
