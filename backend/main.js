@@ -5,17 +5,18 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const auth = require('./router/auth')
 const AuthMiddleware = require('./blitz-server')
-const io = new Server(server);
+const io = new Server(server); 
 
 app.use(express.json());
-
 app.set('view engine', 'ejs');
 
 app.use(async (req, res, next) => {
     await AuthMiddleware(req, res, next)
 })
 
-app.get('/', (req, res) => {
+app.use(express.static('public'));
+
+const csrfToken = (req) => {
     const cookie = req.headers.cookie.split(';').reduce((acc, c) => {
         const [key, v] = c.trim().split('=').map(decodeURIComponent)
         try {
@@ -24,8 +25,19 @@ app.get('/', (req, res) => {
             return Object.assign(acc, { [key]: v })
         }
     }, {})
-    const csrfToken = cookie['web-cookie-prefix_sAntiCsrfToken']
-    res.render('./index', { user: JSON.stringify(res.blitzCtx.session.$publicData), csrfToken });
+    return cookie['web-cookie-prefix_sAntiCsrfToken']
+}
+
+app.get('/', (req, res) => {
+    res.render('./index', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
+});
+
+app.get('/login', (req, res) => {
+    res.render('./login', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
+});
+
+app.get('/dashboard', (req, res) => {
+    res.render('./dashboard', { user: res.blitzCtx.session.$publicData, csrfToken: csrfToken(req) });
 });
 
 app.use('/api/auth', auth)

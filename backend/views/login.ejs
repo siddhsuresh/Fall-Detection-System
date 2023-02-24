@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/login_styles.css" />
+    <link rel="stylesheet" href="/styles/navbar.css" />
+    <%- include('components/head') %>
+
+    <title>Login Page</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </head>
+
+  <body>
+    <%- include('components/navbar') %>
+    <div class="login-page">
+      <div class="form">
+        <form class="register-form" id="register">
+          <input type="email" placeholder="Email" name="email" />
+          <input type="password" placeholder="password" name="password" />
+          <button
+            onclick="
+            event.preventDefault();
+            signup();
+          "
+          >
+            create
+          </button>
+          <p class="message">Already registered? <a href="#">Sign In</a></p>
+        </form>
+        <form class="login-form" id="login">
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="password" />
+          <button
+            onclick="
+            event.preventDefault();
+            login();
+          "
+          >
+            login
+          </button>
+          <p class="message">
+            Not registered? <a href="#" id="createAcc">Create an account</a>
+          </p>
+        </form>
+      </div>
+    </div>
+    <script src="/scripts/login_script.js"></script>
+    <script>
+      async function login() {
+        const email = document.getElementById("login").elements[0].value;
+        const password = document.getElementById("login").elements[1].value;
+        const csrfToken = "<%= csrfToken %>";
+        const user = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "anti-csrf": csrfToken,
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+      async function signup() {
+        const email = document.getElementById("register").elements[0].value;
+        const password = document.getElementById("register").elements[1].value;
+        const csrfToken = "<%= csrfToken %>";
+        const user = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "anti-csrf": csrfToken,
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    </script>
+  </body>
+</html>
