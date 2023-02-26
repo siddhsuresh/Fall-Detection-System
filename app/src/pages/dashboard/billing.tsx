@@ -3,8 +3,8 @@ import DashboardLayout from "src/core/layouts/Dashboard"
 
 const BillingPage: BlitzPage = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="min-h-screen">
+      <h1>Billing Page</h1>
     </div>
   )
 }

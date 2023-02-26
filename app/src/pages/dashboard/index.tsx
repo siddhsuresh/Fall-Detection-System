@@ -64,7 +64,6 @@ const DashboardPage: BlitzPage = () => {
             <canvas className="zdog-canvas" width="480" height="240"></canvas>
           </div>
         </div>
-        <Script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js" strategy="beforeInteractive" />
         <Script src="/zdog.js" strategy="lazyOnload" />
       </Container>
     </div>
@@ -280,7 +279,7 @@ export function GyroscopeGraph() {
       setZ(newDataG![newDataG.length - 1]!.Z)
     },5000)
     return () => clearInterval(interval)
-  }, [_dataG])
+  }, [_dataG, setX, setY, setZ])
   return (
     <div className="flex flex-wrap items-center justify-center w-full">
       <Card>
@@ -336,7 +335,7 @@ export function Example() {
       setZ(newDataG![newDataG.length - 1]!.Z)
     }, 5000)
     return () => clearInterval(interval)
-  }, [_dataA, _dataG])
+  }, [_dataA, _dataG, setX, setY, setZ])
   return (
     <div className="flex flex-wrap items-center justify-center w-full">
       <div className="w-full p-4 md:w-1/2 lg:w-1/2">

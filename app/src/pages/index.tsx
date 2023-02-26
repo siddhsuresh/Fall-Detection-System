@@ -1,5 +1,4 @@
 import styles from "src/styles/Home.module.css"
-import Image from "next/legacy/image"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { Anchor, Center, Box } from "@mantine/core"
@@ -11,8 +10,8 @@ export function Front({ url, text }) {
   return (
     <Anchor
       size="xl"
-      onClick={() => {
-        router.push(url)
+      onClick={async () => {
+        await router.push(url)
       }}
     >
       <Center inline>

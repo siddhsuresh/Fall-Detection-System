@@ -22,6 +22,22 @@ import { useMutation } from "@blitzjs/rpc"
 import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import { UserButton } from "src/core/components/UserButton"
 import logout from "src/auth/mutations/logout"
+import { create } from "zustand"
+
+const useLinksStore = create((set) => ({
+  links: [
+    { link: "/dashboard", label: "Dashboard", icon: IconHome2 },
+    { link: "/dashboard/billing", label: "Billing", icon: IconReceipt2 },
+    { link: "/dashboard/profile", label: "Profile", icon: IconFingerprint },
+    { link: "/dashboard/activity", label: "Your Activity", icon: IconDatabaseImport },
+  ],
+  addLink: (link) => set((state) => ({ links: [...state.links, link] })),
+}))
+
+const useActiveLinkStore = create((set) => ({
+  activeLink: "/dashboard",
+  setActiveLink:  (link) => set(() => ({ activeLink: link })),
+}))
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon")
@@ -82,17 +98,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
-const data = [
-  { link: "/dashboard", label: "Dashboard", icon: IconHome2 },
-  { link: "/dashboard/billing", label: "Billing", icon: IconReceipt2 },
-  { link: "/dashboard/profile", label: "Profile", icon: IconFingerprint },
-  { link: "/dashboard/users", label: "Manage Users", icon: IconKey },
-  { link: "/dashboard/activity", label: "Your Activity", icon: IconDatabaseImport },
-]
-
 const UserInfo = () => {
+  const addLink = useLinksStore((state) => state.addLink)
   const currentUser = useCurrentUser()
   if (!currentUser) return <Loader variant="bars" />
+  if(currentUser.role === "ADMIN") {
+    addLink({ link: "/dashboard/users", label: "Manage Users", icon: IconKey })
+  }
   return <UserButton email={currentUser!.email} name={currentUser!.name || currentUser!.role} />
 }
 
@@ -102,7 +114,7 @@ const Notifications = () => {
       subscriberId={"on-boarding-subscriber-id-123"}
       applicationIdentifier={"wpoirL35OwvS"}
     >
-      <PopoverNotificationCenter colorScheme={"light"}>
+      <PopoverNotificationCenter colorScheme={"dark"}>
         {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
       </PopoverNotificationCenter>
     </NovuProvider>
@@ -111,18 +123,21 @@ const Notifications = () => {
 
 const DashboardPage = () => {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState("Dashboard")
+  // const [active, setActive] = useState("Dashboard")
+  const active = useActiveLinkStore((state) => state.activeLink)
+  const setActive = useActiveLinkStore((state) => state.setActiveLink)
   const [logoutMutation] = useMutation(logout)
   const router = useRouter()
+  const _links = useLinksStore((state) => state.links)
 
-  const links = data.map((item) => (
+  const links = _links.map((item) => (
     <a
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      className={cx(classes.link)}
       href={item.link}
       key={item.label}
-      onClick={(event) => {
+      onClick={async (event) => {
         setActive(item.label)
-        router.push(item.link)
+        await router.push(item.link)
       }}
     >
       <div className={classes.linkIcon} dangerouslySetInnerHTML={{ __html: item.icon() }}></div>
@@ -185,7 +200,9 @@ const DashboardLayout: BlitzLayout<{ title?: string; children?: React.ReactNode 
               <DashboardPage />
             </div>
           </div>
-          <div className="w-full md:w-4/5 p-6 flex flex-col flex-grow flex-shrink -z-1">{children}</div>
+          <div className="w-full md:w-4/5 p-6 flex flex-col flex-grow flex-shrink -z-1">
+            {children}
+          </div>
         </div>
       </div>
     </>
