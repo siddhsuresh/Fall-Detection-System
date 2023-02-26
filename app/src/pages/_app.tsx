@@ -5,6 +5,7 @@ import "src/styles/globals.css"
 import "src/core/styles/index.css"
 import "@tremor/react/dist/esm/tremor.css"
 import { MantineProvider } from "@mantine/core"
+import { Suspense } from "react"
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
@@ -37,9 +38,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           colorScheme: "dark",
         }}
       >
-        {getLayout(<Component {...pageProps} />)}
-      </MantineProvider>
-    </ErrorBoundary>
+        <Suspense fallback={<div>Loading...</div>}>
+          {getLayout(<Component {...pageProps} />)}
+        </Suspense>
+    </MantineProvider>
+    </ErrorBoundary >
   )
 }
 

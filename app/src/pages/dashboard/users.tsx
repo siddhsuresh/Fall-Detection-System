@@ -1,5 +1,6 @@
 import { BlitzPage } from "@blitzjs/next";
 import { Title } from '@mantine/core';
+import { gSSP } from "src/blitz-server";
 import {
     Card,
     Table,
@@ -250,10 +251,26 @@ export function EmergencyContactTable() {
     );
 }
 
+export const getServerSideProps = gSSP(async ({ ctx }) => {
+    const session = ctx.session
+    console.log(session.role)
+    if (session.role != "ADMIN") {
+        return {
+            notFound: true
+        }
+    }
+    return {
+        props: {},
+    }
+    // session.$authorize
+    // session.$setPublicData
+    // etc.
+})
+
 
 UsersPage.suppressFirstRenderFlicker = true
 UsersPage.authenticate = {
-    redirectTo: "/auth/login",
+    redirectTo: "/dashboard",
 }
 UsersPage.getLayout = (page) => <DashboardLayout title="Dashboard">{page}</DashboardLayout>
 

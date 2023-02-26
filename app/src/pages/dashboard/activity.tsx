@@ -19,7 +19,9 @@ const valueFormatterGyroscope = (value) => {
 const ActivityPage: BlitzPage = () => {
     return (
         <div>
-            <Title order={1}>USERS ARCHIVE</Title>
+            <Title order={1} sx={{
+                color: "white"
+            }}>User Logs</Title>
             <Divider />
         <div className="flex items-center justify-center flex-col gap-5">
             <AccerlometerGraph />

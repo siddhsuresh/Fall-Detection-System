@@ -29,9 +29,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface FooterCenteredProps {
-  links: { link: string; label: string }[];
-}
 
 const _links = [
     { link: "/", label: "Home" },
@@ -40,7 +37,7 @@ const _links = [
     { link: "/auth/login", label: "Dashboard" },
   ]
 
-export function FooterCentered() {
+export function HeaderCentered() {
   const { classes } = useStyles();
   const items = _links.map((link) => (
     <Link
@@ -56,7 +53,7 @@ export function FooterCentered() {
       <div className={classes.inner}>
         <Group spacing="xs" noWrap>
             <Text size="md" weight={500}>
-                © 2023 Fall Detection System
+                IWP Review 02
             </Text>
         </Group>
         <Group className={classes.links}>{items}</Group>
