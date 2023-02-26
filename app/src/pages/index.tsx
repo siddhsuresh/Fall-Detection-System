@@ -1,54 +1,53 @@
-import { Suspense } from "react"
 import Link from "next/link"
 import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import logout from "src/auth/mutations/logout"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes } from "@blitzjs/next"
 import styles from "src/styles/Home.module.css"
-import Image from "next/image"
+import Image from "next/legacy/image"
 import Head from "next/head"
+import { useStyles } from "./auth/forgot-password"
+import { useRouter } from "next/router"
+import { Anchor, Center, Box } from "@mantine/core"
 
-const UserInfo = () => {
-  const currentUser = useCurrentUser()
-  const [logoutMutation] = useMutation(logout)
-
-  if (currentUser) {
-    return (
-      <>
-        <button
-          className={styles.button}
-          onClick={async () => {
-            await logoutMutation()
-          }}
+export function Front({ url, text }) {
+  const router = useRouter()
+  return (
+    <Anchor
+      size="xl"
+      onClick={() => {
+        router.push(url)
+      }}
+    >
+      <Center inline>
+        <Box mr={5}>{text}</Box>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="icon icon-tabler icon-tabler-arrow-right"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <Link href={Routes.SignupPage()} className={styles.button}>
-          <strong>Sign Up</strong>
-        </Link>
-        <Link href={Routes.LoginPage()} className={styles.loginButton}>
-          <strong>Login</strong>
-        </Link>
-      </>
-    )
-  }
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M5 12l14 0" />
+          <path d="M13 18l6 -6" />
+          <path d="M13 6l6 6" />
+        </svg>
+      </Center>
+    </Anchor>
+  )
 }
 
 export default function Index() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>CSE3076 | Home</title>
+        <title>CSE3002 | Home</title>
       </Head>
       <div className="relative h-full overflow-hidden md:pt-24">
         <div className="absolute inset-0 opacity-25"></div>
@@ -57,21 +56,18 @@ export default function Index() {
             <p className="flex flex-col items-center text-center text-6xl font-semibold md:text-8xl pb-4">
               Fall Detection System
             </p>
-            <p className="mt-6 flex max-w-lg flex-col items-center text-center text-xl font-semibold ">
-              CSE3076 Context Aware Computing <br />J Component
+            <Front text={"Go to Dashboard"} url={"/dashboard"}/>
+            <p className="mt-6 flex max-w-lg flex-col items-center text-center text-2xl font-semibold ">
+              CSE3002 Internet and Web Programming <br />J Component
             </p>
-            <Suspense fallback={<div>Loading...</div>}>
-              <UserInfo />
-            </Suspense>
-            <p className="mt-6 flex max-w-lg flex-col items-center text-center text-3xl font-semibold">
+            <div className="mt-6 flex max-w-lg flex-col items-center text-center text-3xl font-semibold">
               Presented By <br />
               <div className="p-5 flex flex-row items-center justify-center gap-4 w-full font-bold">
                 <p className="text-xl">Siddharth Suresh 20BPS1042</p>
                 <p className="text-xl">Prantik Dhara 20BPS1083</p>
                 <p className="text-xl">Kanishka Ghosh 20BPS1125</p>
-                <p className="text-xl">Siddharth <br/> M 20BPS1007</p>
               </div>
-            </p>
+            </div>
             <div className="p-5 flex flex-row gap-5 w-xl justify-between">
               <button
                 type="button"
@@ -82,9 +78,7 @@ export default function Index() {
                   borderRadius: "20px",
                 }}
                 onClick={() => {
-                  window.open(
-                    "https://github.com/siddhsuresh/Cloud-Project-Frontend"
-                  );
+                  window.open("https://github.com/siddhsuresh/Cloud-Project-Frontend")
                 }}
               >
                 <svg
@@ -107,9 +101,7 @@ export default function Index() {
                   borderRadius: "20px",
                 }}
                 onClick={() => {
-                  window.open(
-                    "https://github.com/siddhsuresh/Cloud-Project-Backend"
-                  );
+                  window.open("https://github.com/siddhsuresh/Cloud-Project-Backend")
                 }}
               >
                 <svg
@@ -130,44 +122,33 @@ export default function Index() {
       <section>
         <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
           <div className="max-w-xl">
-            <h2 className="text-4xl font-bold sm:text-6xl text-center sm:text-left">
-              Features
-            </h2>
+            <h2 className="text-4xl font-bold sm:text-6xl text-center sm:text-left">Features</h2>
 
             <p className="mt-4 sm:text-xl">
-              Listing the various key aspects implemented for the working of the
-              fall detection system
+              Listing the various key aspects implemented for the working of the fall detection
+              system
             </p>
           </div>
 
           <ul className="grid grid-cols-2 gap-10 mt-8 sm:grid-cols-4 lg:grid-cols-4">
-            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
-              backdropFilter : "blur(5px)"
-            }}>
-              <p className="text-3xl font-semibold">
-                Implemented the BackEnd API using FastAPI
-              </p>
+            <li
+              className="p-8 shadow-2xl rounded-xl col-span-2"
+              style={{
+                backdropFilter: "blur(5px)",
+              }}
+            >
+              <p className="text-3xl font-semibold">Implemented the BackEnd API using FastAPI</p>
               <p className="mt-3 text-xl font-medium flex flex-row gap-4">
-                <svg
-                  width="27"
-                  height="30"
-                  viewBox="0 0 27 30"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>heroku-logo</title>
-                  <path
-                    d="M3 0C1.13 0 0 1.11 0 2.903v24.194C0 28.883 1.13 30 3 30h21c1.863 0 3-1.11 3-2.903V2.903C26.994 1.11 25.863 0 24 0H3zm21.042 2c.508.006.958.448.958.929V27.07c0 .487-.45.929-.958.929H2.958C2.45 28 2 27.558 2 27.071V2.93c0-.488.45-.93.958-.93h21.084zM20 25h-2.781v-8.506c0-.774-.237-1.048-.468-1.208-1.396-.959-5.414-.042-7.834.916L7 17.012 7.006 5h2.816v7.917a20.99 20.99 0 0 1 1.882-.482c2.988-.643 5.184-.47 6.616.505.787.536 1.68 1.59 1.68 3.554V25zm-6-15h3.293A16.109 16.109 0 0 0 20 5h-3.287c-.49 1.188-1.385 3.188-2.713 5zM7 25v-7l3 3.5L7 25z"
-                    fill="#79589f"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-                Hosted in Heroku
+                Hosted in Render
               </p>
             </li>
 
-            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
-              backdropFilter : "blur(5px)"
-            }}>
+            <li
+              className="p-8 shadow-2xl rounded-xl col-span-2"
+              style={{
+                backdropFilter: "blur(5px)",
+              }}
+            >
               <p className="text-3xl font-semibold">
                 Implemented the Real Time <br />
                 Bi-Directional Connection
@@ -185,7 +166,7 @@ export default function Index() {
                     cy="128"
                     r="114"
                     stroke="#010101"
-                    stroke-width="20"
+                    strokeWidth="20"
                     fill="#ffffff"
                   />
                   <path
@@ -197,38 +178,43 @@ export default function Index() {
               </p>
             </li>
             <div className="col-span-4 flex items-center justify-center">
-            <li className="p-8 shadow-2xl rounded-xl w-[50%]" style={{
-              backdropFilter : "blur(5px)"
-            }}>
-              <p className="text-3xl font-semibold">
-                Fall Classification Using Random Forest Machine Learning Algorithm
-              </p>
-              <p className="mt-3 text-xl font-medium flex flex-row gap-4">
-                Using scikit-learn and pandas libraries
-              </p>
-            </li>
+              <li
+                className="p-8 shadow-2xl rounded-xl w-[50%]"
+                style={{
+                  backdropFilter: "blur(5px)",
+                }}
+              >
+                <p className="text-3xl font-semibold">
+                  Fall Classification Using Random Forest Machine Learning Algorithm
+                </p>
+                <p className="mt-3 text-xl font-medium flex flex-row gap-4">
+                  Using scikit-learn and pandas libraries
+                </p>
+              </li>
             </div>
-            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
-              backdropFilter : "blur(5px)"
-            }}>
+            <li
+              className="p-8 shadow-2xl rounded-xl col-span-2"
+              style={{
+                backdropFilter: "blur(5px)",
+              }}
+            >
               <p className="text-3xl font-semibold">
                 Created This Website using Next.js and Blitz Toolkit
               </p>
               <p className="mt-3 text-xl font-medium flex flex-row gap-2">
                 Hosted in
-                <svg
-                  height="26"
-                  viewBox="0 0 284 65"
-                  aria-label="Vercel Logotype"
-                >
-                  <path d="M141.68 16.25c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.46 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm117.14-14.5c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.45 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm-39.03 3.5c0 6 3.92 10 10 10 4.12 0 7.21-1.87 8.8-4.92l7.68 4.43c-3.18 5.3-9.14 8.49-16.48 8.49-11.05 0-19-7.2-19-18s7.96-18 19-18c7.34 0 13.29 3.19 16.48 8.49l-7.68 4.43c-1.59-3.05-4.68-4.92-8.8-4.92-6.07 0-10 4-10 10zm82.48-29v46h-9v-46h9zM37.59.25l36.95 64H.64l36.95-64zm92.38 5l-27.71 48-27.71-48h10.39l17.32 30 17.32-30h10.39zm58.91 12v9.69c-1-.29-2.06-.49-3.2-.49-5.81 0-10 4-10 10v14.8h-9v-34h9v9.2c0-5.08 5.91-9.2 13.2-9.2z"></path>
+                <svg height="26" viewBox="0 0 284 65" aria-label="Vercel Logotype">
+                  <path fill="#fff" d="M141.68 16.25c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.46 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm117.14-14.5c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.45 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm-39.03 3.5c0 6 3.92 10 10 10 4.12 0 7.21-1.87 8.8-4.92l7.68 4.43c-3.18 5.3-9.14 8.49-16.48 8.49-11.05 0-19-7.2-19-18s7.96-18 19-18c7.34 0 13.29 3.19 16.48 8.49l-7.68 4.43c-1.59-3.05-4.68-4.92-8.8-4.92-6.07 0-10 4-10 10zm82.48-29v46h-9v-46h9zM37.59.25l36.95 64H.64l36.95-64zm92.38 5l-27.71 48-27.71-48h10.39l17.32 30 17.32-30h10.39zm58.91 12v9.69c-1-.29-2.06-.49-3.2-.49-5.81 0-10 4-10 10v14.8h-9v-34h9v9.2c0-5.08 5.91-9.2 13.2-9.2z"></path>
                 </svg>
               </p>
             </li>
 
-            <li className="p-8 shadow-2xl rounded-xl col-span-2" style={{
-              backdropFilter : "blur(5px)"
-            }}>
+            <li
+              className="p-8 shadow-2xl rounded-xl col-span-2"
+              style={{
+                backdropFilter: "blur(5px)",
+              }}
+            >
               <p className="text-3xl font-semibold">
                 Written the Microcontroller Code using the Arduino Framework
               </p>
@@ -242,16 +228,13 @@ export default function Index() {
       <aside className="p-5 relative lg:flex h-full">
         <div className="w-full p-12 text-center lg:w-1/2 sm:p-16 lg:p-24 lg:text-left">
           <div className="max-w-xl mx-auto lg:ml-0">
-            <p className="text-sm font-medium">
-              Circuit Visulisation using Fritzing Software
-            </p>
+            <p className="text-sm font-medium">Circuit Visulisation using Fritzing Software</p>
 
-            <p className="mt-2 text-2xl font-bold sm:text-4xl">
-              Visualising the ESP32 Circuit
-            </p>
+            <p className="mt-2 text-2xl font-bold sm:text-4xl">Visualising the ESP32 Circuit</p>
 
             <p className="lg:mt-4 block text-lg">
-              The Components connected to the ESP32 Microcontroller is MPU6050 Accerometer and Gyroscope
+              The Components connected to the ESP32 Microcontroller is MPU6050 Accerometer and
+              Gyroscope
             </p>
           </div>
         </div>
@@ -298,7 +281,7 @@ export default function Index() {
         `}
       </style>
     </div>
-  );
+  )
 }
 
-Index.suppressFirstRenderFlicker = true;
+Index.suppressFirstRenderFlicker = true

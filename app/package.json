@@ -26,14 +26,26 @@
     "@blitzjs/auth": "next--multiple-fields",
     "@blitzjs/next": "next--multiple-fields",
     "@blitzjs/rpc": "next--multiple-fields",
+    "@emotion/react": "11.10.6",
+    "@emotion/server": "11.10.0",
     "@heroicons/react": "2.0.16",
     "@hookform/error-message": "2.0.1",
     "@hookform/resolvers": "2.9.11",
+    "@mantine/core": "5.10.4",
+    "@mantine/form": "5.10.4",
+    "@mantine/hooks": "5.10.4",
+    "@mantine/next": "5.10.4",
+    "@mantine/notifications": "5.10.4",
+    "@novu/notification-center": "0.12.0",
     "@prisma/client": "4.6.0",
+    "@tabler/icons": "2.5.0",
     "@tremor/react": "1.8.0",
+    "add": "2.0.6",
     "autoprefixer": "10.x",
     "blitz": "next--multiple-fields",
+    "daisyui": "2.51.1",
     "next": "13.1",
+    "patch-package": "6.5.1",
     "postcss": "8.x",
     "prisma": "4.6.0",
     "react": "18.2.0",
@@ -68,5 +80,10 @@
     "vite-tsconfig-paths": "3.6.0",
     "vitest": "0.25.3"
   },
-  "private": true
+  "private": true,
+  "pnpm": {
+    "patchedDependencies": {
+      "@tabler/icons@2.5.0": "patches/@tabler__icons@2.5.0.patch"
+    }
+  }
 }

@@ -2,8 +2,9 @@ import { ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps } from "@bl
 import { AuthenticationError, AuthorizationError } from "blitz"
 import { withBlitz } from "src/blitz-client"
 import "src/styles/globals.css"
-import "src/core/styles/index.css";
-import '@tremor/react/dist/esm/tremor.css'
+import "src/core/styles/index.css"
+import "@tremor/react/dist/esm/tremor.css"
+import { MantineProvider } from "@mantine/core"
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
@@ -29,7 +30,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   return (
     <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      {getLayout(<Component {...pageProps} />)}
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme: "dark",
+        }}
+      >
+        {getLayout(<Component {...pageProps} />)}
+      </MantineProvider>
     </ErrorBoundary>
   )
 }

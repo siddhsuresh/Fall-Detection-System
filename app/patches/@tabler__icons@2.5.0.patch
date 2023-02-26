@@ -1,0 +1,18 @@
+diff --git a/package.json b/package.json
+index 3f633b72a17c74b1b0e87915e67e01d0ab28d1b6..b3405e57deddf23051cc621fc8722935214d0496 100644
+--- a/package.json
++++ b/package.json
+@@ -13,7 +13,12 @@
+   "exports": {
+     "./*": [
+       "./icons/*"
+-    ]
++    ],
++    ".": {
++      "import": "./dist/esm/tabler-icons.js",
++      "require": "./dist/cjs/tabler-icons.js",
++      "umd": "./dist/umd/tabler-icons.js"
++    }
+   },
+   "module": "dist/esm/tabler-icons.js",
+   "unpkg": "dist/umd/tabler-icons.min.js",
