@@ -8,8 +8,83 @@ import { Back } from "./auth/forgot-password"
 import { Routes } from "@blitzjs/next"
 import { createStyles, Avatar, Text, Group, Button } from '@mantine/core';
 import { IconPhoneCall, IconAt } from '@tabler/icons';
-import { HeaderCentered } from "src/core/components/Header"
+import { HeaderCentered } from "src/core/components/Header";
+import { TextInput, Textarea, SimpleGrid, Title} from '@mantine/core';
+import { useForm } from '@mantine/form';
 
+
+export function GetInTouchSimple() {
+  const form = useForm({
+    initialValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+    validate: {
+      name: (value) => value.trim().length < 2,
+      email: (value) => !/^\S+@\S+$/.test(value),
+      subject: (value) => value.trim().length === 0,
+    },
+  });
+
+  return (
+    <form onSubmit={form.onSubmit(() => {})}>
+      <Title
+        order={2}
+        size="h1"
+        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}` })}
+        weight={900}
+        align="center"
+      >
+        Have a question for us?
+      </Title>
+
+      <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+        <TextInput
+          label="Name"
+          placeholder="Your name"
+          name="name"
+          variant="filled"
+          {...form.getInputProps('name')}
+        />
+        <TextInput
+          label="Email"
+          placeholder="Your email"
+          name="email"
+          variant="filled"
+          {...form.getInputProps('email')}
+        />
+      </SimpleGrid>
+
+      <TextInput
+        label="Subject"
+        placeholder="Subject"
+        mt="md"
+        name="subject"
+        variant="filled"
+        {...form.getInputProps('subject')}
+      />
+      <Textarea
+        mt="md"
+        label="Message"
+        placeholder="Your message"
+        maxRows={10}
+        minRows={5}
+        autosize
+        name="message"
+        variant="filled"
+        {...form.getInputProps('subject')}
+      />
+
+      <Group position="center" mt="xl">
+        <Button sx={{ backgroundColor: "blue", border: "1px solid white" }} type="submit" size="md">
+          Send message
+        </Button>
+      </Group>
+    </form>
+  );
+}
 
 const useStyles = createStyles((theme) => ({
     icon: {
@@ -56,7 +131,7 @@ export function UserInfoIcons({ avatar, name, title, phone, email, linkedin}: Us
                             {phone}
                         </Text>
                     </Group>
-                    <Button sx={{ backgroundColor: "blue", border: "1px solid white" }} onClick={() => {
+                    <Button sx={{ border: "1px solid white" }} onClick={() => {
                     window.open(`https://www.linkedin.com/in/${linkedin}`)
                   }}>
                         Contact Me
@@ -89,6 +164,10 @@ export default function About() {
                         <div className="m-10">
                             <UserInfoIcons avatar="/prantikDP.jpeg" name="Prantik Dhara" email="prantik.dhara2020@vitstudent.ac.in" title="Full-Stack Web Developer" phone="+91 9874563210" linkedin="prantik-dhara-528049200" />
                         </div>
+                        <div className="m-10">
+                            <GetInTouchSimple />
+                        </div>
+
                     </div>
                 </div>
                 <FooterCentered />
