@@ -4,6 +4,7 @@ import { BlitzLayout } from "@blitzjs/next"
 import { Loader } from "@mantine/core"
 import { Suspense, useState } from "react"
 import { createStyles, Navbar, Group, Code, Text } from "@mantine/core"
+import { useRouter } from "next/router"
 import {
   NovuProvider,
   PopoverNotificationCenter,
@@ -15,7 +16,7 @@ import {
   IconDatabaseImport,
   IconReceipt2,
   IconLogout,
-  IconHome2
+  IconHome2,
 } from "@tabler/icons"
 import { useMutation } from "@blitzjs/rpc"
 import { useCurrentUser } from "src/users/hooks/useCurrentUser"
@@ -110,8 +111,9 @@ const Notifications = () => {
 
 const DashboardPage = () => {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState("Billing")
+  const [active, setActive] = useState("Dashboard")
   const [logoutMutation] = useMutation(logout)
+  const router = useRouter()
 
   const links = data.map((item) => (
     <a
@@ -119,8 +121,8 @@ const DashboardPage = () => {
       href={item.link}
       key={item.label}
       onClick={(event) => {
-        event.preventDefault()
         setActive(item.label)
+        router.push(item.link)
       }}
     >
       <div className={classes.linkIcon} dangerouslySetInnerHTML={{ __html: item.icon() }}></div>
@@ -178,7 +180,11 @@ const DashboardLayout: BlitzLayout<{ title?: string; children?: React.ReactNode 
       </Head>
       <div className="container">
         <div className="flex flex-col md:flex-row">
-          <DashboardPage />
+          <div className="w-full md:w-1/5 flex flex-col flex-grow flex-shrink">
+            <div className="md:fixed">
+              <DashboardPage />
+            </div>
+          </div>
           <div className="w-full md:w-4/5 p-6 flex flex-col flex-grow flex-shrink">{children}</div>
         </div>
       </div>
