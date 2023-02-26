@@ -143,8 +143,25 @@ upperArm.copyGraph({
     rotate: { x: TAU / 4 },
 })
 
+// variables for rotation dragging
+//get the values of x, y and z from id="x", id="y" and id="z"
+
+function convertRadiansToDegrees(radians) {
+    var pi = Math.PI;
+    return radians * (180 / pi);
+}
+
 function animate() {
+    let viewRotation = new Zdog.Vector();
+    let x = document.getElementById("x").innerText;
+    let y = document.getElementById("y").innerText;
+    let z = document.getElementById("z").innerText;
+    viewRotation.x = convertRadiansToDegrees( x);
+    viewRotation.y = convertRadiansToDegrees( y);
+    viewRotation.z = convertRadiansToDegrees( z);
+    illo.updateGraph()
     illo.updateRenderGraph()
+    illo.rotate.set(viewRotation)
     requestAnimationFrame(animate)
 }
 

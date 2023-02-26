@@ -60,10 +60,12 @@ const DashboardPage: BlitzPage = () => {
         </div>
         </div>
         <div className="flex items-center justify-center">
-          <canvas className="zdog-canvas" width="240" height="240"></canvas>
+        <div className=" bg-[#FDB] rounded-xl  max-w-xl">
+          <canvas className="zdog-canvas" width="480" height="240"></canvas>
+        </div>
         </div>
         <Script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js" strategy="beforeInteractive" />
-        <Script src="/zdog.js" />
+        <Script src="/zdog.js" strategy="lazyOnload" />
       </Container>
     </div>
   )
