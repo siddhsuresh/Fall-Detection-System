@@ -135,9 +135,9 @@ const DashboardPage = () => {
       className={cx(classes.link)}
       href={item.link}
       key={item.label}
-      onClick={(event) => {
+      onClick={async (event) => {
         setActive(item.label)
-        router.push(item.link)
+        await router.push(item.link)
       }}
     >
       <div className={classes.linkIcon} dangerouslySetInnerHTML={{ __html: item.icon() }}></div>

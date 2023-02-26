@@ -27,8 +27,8 @@ export function Back({ url, text }) {
       color="dimmed"
       size="sm"
       className={classes.control}
-      onClick={() => {
-        router.push(url)
+      onClick={async () => {
+        await router.push(url)
       }}
     >
       <Center inline>
