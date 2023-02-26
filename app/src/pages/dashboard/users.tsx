@@ -251,8 +251,6 @@ export function EmergencyContactTable() {
 }
 
 
-
-
 UsersPage.suppressFirstRenderFlicker = true
 UsersPage.authenticate = {
     redirectTo: "/auth/login",

@@ -131,7 +131,7 @@ const DashboardPage = () => {
   ))
 
   return (
-    <Navbar height={720} width={{ sm: 300 }} p="md">
+    <Navbar height={720} width={{ sm: 300 }} p="md" zIndex={10}>
       <Navbar.Section>
         <Suspense fallback={<Loader variant="bars" />}>
           <UserInfo />
@@ -180,12 +180,12 @@ const DashboardLayout: BlitzLayout<{ title?: string; children?: React.ReactNode 
       </Head>
       <div className="container">
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/5 flex flex-col flex-grow flex-shrink">
+          <div className="w-full md:w-1/5 flex flex-col flex-grow flex-shrink z-10">
             <div className="md:fixed">
               <DashboardPage />
             </div>
           </div>
-          <div className="w-full md:w-4/5 p-6 flex flex-col flex-grow flex-shrink">{children}</div>
+          <div className="w-full md:w-4/5 p-6 flex flex-col flex-grow flex-shrink -z-1">{children}</div>
         </div>
       </div>
     </>

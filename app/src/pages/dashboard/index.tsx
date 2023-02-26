@@ -40,29 +40,29 @@ const DashboardPage: BlitzPage = () => {
         </div>
         <div className="flex items-center justify-center m-10">
           <div data-theme="black" className="rounded-2xl p-5 max-w-xl">
-          <div className="stats shadow">
-            <div className="stat place-items-center">
-              <div className="stat-title">X Axis</div>
-              <div id="x" className="stat-value">{x.toPrecision(2)}</div>
-              <div className="stat-desc">rad/s</div>
-            </div>
-            <div className="stat place-items-center">
-              <div className="stat-title">Y Axis</div>
-              <div id="y" className="stat-value">{y.toPrecision(2)}</div>
-              <div className="stat-desc">rad/s</div>
-            </div>
-            <div className="stat place-items-center">
-              <div className="stat-title">Z Axis</div>
-              <div id="z" className="stat-value">{z.toPrecision(2)}</div>
-              <div className="stat-desc">rad/s</div>
+            <div className="stats shadow">
+              <div className="stat place-items-center">
+                <div className="stat-title">X Axis</div>
+                <div id="x" className="stat-value">{x.toPrecision(2)}</div>
+                <div className="stat-desc">rad/s</div>
+              </div>
+              <div className="stat place-items-center">
+                <div className="stat-title">Y Axis</div>
+                <div id="y" className="stat-value">{y.toPrecision(2)}</div>
+                <div className="stat-desc">rad/s</div>
+              </div>
+              <div className="stat place-items-center">
+                <div className="stat-title">Z Axis</div>
+                <div id="z" className="stat-value">{z.toPrecision(2)}</div>
+                <div className="stat-desc">rad/s</div>
+              </div>
             </div>
           </div>
         </div>
-        </div>
         <div className="flex items-center justify-center">
-        <div className=" bg-[#FDB] rounded-xl  max-w-xl">
-          <canvas className="zdog-canvas" width="480" height="240"></canvas>
-        </div>
+          <div className=" bg-[#FDB] rounded-xl  max-w-xl">
+            <canvas className="zdog-canvas" width="480" height="240"></canvas>
+          </div>
         </div>
         <Script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js" strategy="beforeInteractive" />
         <Script src="/zdog.js" strategy="lazyOnload" />
@@ -219,6 +219,84 @@ const valueFormatterAcelerometer = (value) => {
 const valueFormatterGyroscope = (value) => {
   //return value with 2 decimal places and unit rad/s
   return `${value.toPrecision(2)} rad/s`
+}
+
+export function AccerlometerGraph() {
+  const [_dataA, setDataA] = useState(data)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newDataA = [..._dataA]
+      const date = new Date()
+      newDataA.push({
+        Time: `${date.getHours().toPrecision(2)}:${date.getMinutes().toPrecision(2)}:${date
+          .getSeconds()
+          .toPrecision(2)}`,
+        X: Math.floor(Math.random() * 10),
+        Y: Math.floor(Math.random() * 10),
+        Z: Math.floor(Math.random() * 10),
+      })
+      setDataA(newDataA)
+    },5000)
+    return () => clearInterval(interval)
+  }, [_dataA])
+  return (
+    <div className="flex flex-wrap items-center justify-center w-full">
+        <Card>
+          <TTtile>Accerlometer Readings</TTtile>
+          <AreaChart
+            marginTop="mt-4"
+            data={_dataA}
+            categories={["X", "Y", "Z"]}
+            dataKey="Time"
+            colors={["indigo", "fuchsia", "emerald"]}
+            valueFormatter={valueFormatterAcelerometer}
+            height="h-80"
+          />
+        </Card>
+    </div>
+  )
+}
+
+export function GyroscopeGraph() {
+  const [_dataG, setDataG] = useState(data)
+  const setX = useGyroScopeStore((state) => state.setX)
+  const setY = useGyroScopeStore((state) => state.setY)
+  const setZ = useGyroScopeStore((state) => state.setZ)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const date = new Date()
+      const newDataG = [..._dataG]
+      newDataG.push({
+        Time: `${date.getHours().toPrecision(2)}:${date.getMinutes().toPrecision(2)}:${date
+          .getSeconds()
+          .toPrecision(2)}`,
+        X: Math.random(),
+        Y: Math.random(),
+        Z: Math.random(),
+      })
+      setDataG(newDataG)
+      setX(newDataG![newDataG.length - 1]!.X)
+      setY(newDataG![newDataG.length - 1]!.Y)
+      setZ(newDataG![newDataG.length - 1]!.Z)
+    },5000)
+    return () => clearInterval(interval)
+  }, [_dataG])
+  return (
+    <div className="flex flex-wrap items-center justify-center w-full">
+      <Card>
+          <TTtile>Gyroscope Readings</TTtile>
+          <AreaChart
+            marginTop="mt-4"
+            data={_dataG}
+            categories={["X", "Y", "Z"]}
+            dataKey="Time"
+            colors={["indigo", "fuchsia", "emerald"]}
+            valueFormatter={valueFormatterGyroscope}
+            height="h-80"
+          />
+        </Card>
+      </div>
+  )
 }
 
 export function Example() {
