@@ -2,8 +2,31 @@ import { BlitzPage } from "@blitzjs/next"
 import DashboardLayout from "src/core/layouts/Dashboard"
 import Script from "next/script"
 
+import { create } from "zustand"
+
+interface GyroScopeStore {
+  x: number
+  y: number
+  z: number
+  setX: (x: number) => void
+  setY: (y: number) => void
+  setZ: (z: number) => void
+}
+
+const useGyroScopeStore = create<GyroScopeStore>((set) => ({
+  x: 0,
+  y: 0,
+  z: 0,
+  setX: (x: number) => set({ x }),
+  setY: (y: number) => set({ y }),
+  setZ: (z: number) => set({ z }),
+}))
+
 const DashboardPage: BlitzPage = () => {
   const { classes } = useStyles()
+  const x = useGyroScopeStore((state) => state.x)
+  const y = useGyroScopeStore((state) => state.y)
+  const z = useGyroScopeStore((state) => state.z)
   return (
     <div>
       <HeroText />
@@ -14,6 +37,27 @@ const DashboardPage: BlitzPage = () => {
           <Text className={classes.description} size="lg" align="center" mt="md">
             Using the data from the sensors, we can visualize the orientation of the device.
           </Text>
+        </div>
+        <div className="flex items-center justify-center m-10">
+          <div data-theme="black" className="rounded-2xl p-5 max-w-xl">
+          <div className="stats shadow">
+            <div className="stat place-items-center">
+              <div className="stat-title">X Axis</div>
+              <div id="x" className="stat-value">{x.toPrecision(2)}</div>
+              <div className="stat-desc">rad/s</div>
+            </div>
+            <div className="stat place-items-center">
+              <div className="stat-title">Y Axis</div>
+              <div id="y" className="stat-value">{y.toPrecision(2)}</div>
+              <div className="stat-desc">rad/s</div>
+            </div>
+            <div className="stat place-items-center">
+              <div className="stat-title">Z Axis</div>
+              <div id="z" className="stat-value">{z.toPrecision(2)}</div>
+              <div className="stat-desc">rad/s</div>
+            </div>
+          </div>
+        </div>
         </div>
         <div className="flex items-center justify-center">
           <canvas className="zdog-canvas" width="240" height="240"></canvas>
@@ -178,6 +222,9 @@ const valueFormatterGyroscope = (value) => {
 export function Example() {
   const [_dataA, setDataA] = useState(data)
   const [_dataG, setDataG] = useState(data)
+  const setX = useGyroScopeStore((state) => state.setX)
+  const setY = useGyroScopeStore((state) => state.setY)
+  const setZ = useGyroScopeStore((state) => state.setZ)
   useEffect(() => {
     //every 5 seconds, update the data
     const interval = setInterval(() => {
@@ -204,6 +251,9 @@ export function Example() {
       })
       newDataG.shift()
       setDataG(newDataG)
+      setX(newDataG![newDataG.length - 1]!.X)
+      setY(newDataG![newDataG.length - 1]!.Y)
+      setZ(newDataG![newDataG.length - 1]!.Z)
     }, 5000)
     return () => clearInterval(interval)
   }, [_dataA, _dataG])

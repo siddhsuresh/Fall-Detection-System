@@ -61,6 +61,7 @@ specifiers:
   vite-tsconfig-paths: 3.6.0
   vitest: 0.25.3
   zod: 3.20.2
+  zustand: 4.3.3
 
 dependencies:
   '@blitzjs/auth': 0.0.0-multiple-fields-20230207144902_6xnmgnha7lhch4lnm5aozikgju
@@ -96,6 +97,7 @@ dependencies:
   socket.io-client: 4.6.1
   tailwindcss: 3.2.7_postcss@8.4.21
   zod: 3.20.2
+  zustand: 4.3.3_react@18.2.0
 
 devDependencies:
   '@next/bundle-analyzer': 12.0.8
@@ -10946,4 +10948,20 @@ packages:
 
   /zod/3.20.2:
     resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false
+
+  /zustand/4.3.3_react@18.2.0:
+    resolution: {integrity: sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
