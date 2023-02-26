@@ -1,14 +1,9 @@
-import Link from "next/link"
-import { useCurrentUser } from "src/users/hooks/useCurrentUser"
-import logout from "src/auth/mutations/logout"
-import { useMutation } from "@blitzjs/rpc"
-import { Routes } from "@blitzjs/next"
 import styles from "src/styles/Home.module.css"
 import Image from "next/legacy/image"
 import Head from "next/head"
-import { useStyles } from "./auth/forgot-password"
 import { useRouter } from "next/router"
 import { Anchor, Center, Box } from "@mantine/core"
+import { FooterCentered } from "src/core/components/Footer"
 
 export function Front({ url, text }) {
   const router = useRouter()
@@ -49,14 +44,14 @@ export default function Index() {
       <Head>
         <title>CSE3002 | Home</title>
       </Head>
-      <div className="relative h-full overflow-hidden md:pt-24">
+      <div className="relative h-full overflow-hidden md:pt-24 md:mt-[-9%]">
         <div className="absolute inset-0 opacity-25"></div>
         <div className="container relative z-10 mx-auto my-24 flex w-4/5 items-center rounded-lg border-4 border-white py-16 md:my-32">
           <div className="relative z-10 flex w-full flex-col items-center justify-between gap-4">
             <p className="flex flex-col items-center text-center text-6xl font-semibold md:text-8xl pb-4">
               Fall Detection System
             </p>
-            <Front text={"Go to Dashboard"} url={"/dashboard"}/>
+            <Front text={"Go to Dashboard"} url={"/dashboard"} />
             <p className="mt-6 flex max-w-lg flex-col items-center text-center text-2xl font-semibold ">
               CSE3002 Internet and Web Programming <br />J Component
             </p>
@@ -138,9 +133,7 @@ export default function Index() {
               }}
             >
               <p className="text-3xl font-semibold">Implemented the BackEnd API using FastAPI</p>
-              <p className="mt-3 text-xl font-medium flex flex-row gap-4">
-                Hosted in Render
-              </p>
+              <p className="mt-3 text-xl font-medium flex flex-row gap-4">Hosted in Render</p>
             </li>
 
             <li
@@ -204,7 +197,10 @@ export default function Index() {
               <p className="mt-3 text-xl font-medium flex flex-row gap-2">
                 Hosted in
                 <svg height="26" viewBox="0 0 284 65" aria-label="Vercel Logotype">
-                  <path fill="#fff" d="M141.68 16.25c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.46 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm117.14-14.5c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.45 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm-39.03 3.5c0 6 3.92 10 10 10 4.12 0 7.21-1.87 8.8-4.92l7.68 4.43c-3.18 5.3-9.14 8.49-16.48 8.49-11.05 0-19-7.2-19-18s7.96-18 19-18c7.34 0 13.29 3.19 16.48 8.49l-7.68 4.43c-1.59-3.05-4.68-4.92-8.8-4.92-6.07 0-10 4-10 10zm82.48-29v46h-9v-46h9zM37.59.25l36.95 64H.64l36.95-64zm92.38 5l-27.71 48-27.71-48h10.39l17.32 30 17.32-30h10.39zm58.91 12v9.69c-1-.29-2.06-.49-3.2-.49-5.81 0-10 4-10 10v14.8h-9v-34h9v9.2c0-5.08 5.91-9.2 13.2-9.2z"></path>
+                  <path
+                    fill="#fff"
+                    d="M141.68 16.25c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.46 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm117.14-14.5c-11.04 0-19 7.2-19 18s8.96 18 20 18c6.67 0 12.55-2.64 16.19-7.09l-7.65-4.42c-2.02 2.21-5.09 3.5-8.54 3.5-4.79 0-8.86-2.5-10.37-6.5h28.02c.22-1.12.35-2.28.35-3.5 0-10.79-7.96-17.99-19-17.99zm-9.45 14.5c1.25-3.99 4.67-6.5 9.45-6.5 4.79 0 8.21 2.51 9.45 6.5h-18.9zm-39.03 3.5c0 6 3.92 10 10 10 4.12 0 7.21-1.87 8.8-4.92l7.68 4.43c-3.18 5.3-9.14 8.49-16.48 8.49-11.05 0-19-7.2-19-18s7.96-18 19-18c7.34 0 13.29 3.19 16.48 8.49l-7.68 4.43c-1.59-3.05-4.68-4.92-8.8-4.92-6.07 0-10 4-10 10zm82.48-29v46h-9v-46h9zM37.59.25l36.95 64H.64l36.95-64zm92.38 5l-27.71 48-27.71-48h10.39l17.32 30 17.32-30h10.39zm58.91 12v9.69c-1-.29-2.06-.49-3.2-.49-5.81 0-10 4-10 10v14.8h-9v-34h9v9.2c0-5.08 5.91-9.2 13.2-9.2z"
+                  ></path>
                 </svg>
               </p>
             </li>
@@ -225,29 +221,7 @@ export default function Index() {
           </ul>
         </div>
       </section>
-      <aside className="p-5 relative lg:flex h-full">
-        <div className="w-full p-12 text-center lg:w-1/2 sm:p-16 lg:p-24 lg:text-left">
-          <div className="max-w-xl mx-auto lg:ml-0">
-            <p className="text-sm font-medium">Circuit Visulisation using Fritzing Software</p>
-
-            <p className="mt-2 text-2xl font-bold sm:text-4xl">Visualising the ESP32 Circuit</p>
-
-            <p className="lg:mt-4 block text-lg">
-              The Components connected to the ESP32 Microcontroller is MPU6050 Accerometer and
-              Gyroscope
-            </p>
-          </div>
-        </div>
-
-        <div className="relative w-full h-64 sm:h-96 lg:w-1/2 lg:h-auto rounded-lg">
-          <Image
-            src="/1.png"
-            alt="ESP8266 Connection"
-            className="p-1 rounded-xl absolute inset-0 object-scale-down w-full h-full hover:scale-105 ease-in-out duration-300"
-            layout="fill"
-          />
-        </div>
-      </aside>
+      <FooterCentered />
       <style jsx global>
         {`
           .buttons {

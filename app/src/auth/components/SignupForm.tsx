@@ -1,21 +1,133 @@
-import { LabeledTextField } from "src/core/components/LabeledTextField"
+import { AuthenticationError, PromiseReturnType } from "blitz"
+import Link from "next/link"
 import { Form, FORM_ERROR } from "src/core/components/Form"
 import signup from "src/auth/mutations/signup"
 import { Signup } from "src/auth/validations"
 import { useMutation } from "@blitzjs/rpc"
+import { Routes } from "@blitzjs/next"
 
 type SignupFormProps = {
-  onSuccess?: () => void
+  onSuccess?: (user: PromiseReturnType<typeof signup>) => void
 }
 
-export const SignupForm = (props: SignupFormProps) => {
-  const [signupMutation] = useMutation(signup)
-  return (
-    <div>
-      <h1>Create an Account</h1>
+import {
+  Paper,
+  createStyles,
+  TextInput,
+  PasswordInput,
+  Checkbox,
+  Button,
+  Title,
+  Text,
+} from "@mantine/core"
+import { useFormContext } from "react-hook-form"
+import { ErrorMessage } from "@hookform/error-message"
+import { Back } from "src/pages/auth/forgot-password"
 
-      <Form
-        submitText="Create Account"
+const useStyles = createStyles((theme) => ({
+  wrapper: {
+    minHeight: 900,
+    backgroundSize: "cover",
+    backgroundImage:
+      "url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)",
+  },
+
+  form: {
+    borderRight: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[3]
+    }`,
+    minHeight: 900,
+    maxWidth: 450,
+    paddingTop: 80,
+
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      maxWidth: "100%",
+    },
+  },
+
+  title: {
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+  },
+
+  logo: {
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    width: 120,
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+}))
+
+export function EmailInput() {
+  const {
+    register,
+    formState: { isSubmitting, errors },
+  } = useFormContext()
+  return (
+    <>
+      <TextInput
+        label="Email"
+        disabled={isSubmitting}
+        placeholder="hello@gmail.com"
+        size="md"
+        {...register("email", { required: "Email is required" })}
+      />
+      <ErrorMessage
+        render={({ message }) => (
+          <div role="alert" style={{ color: "red" }}>
+            {message}
+          </div>
+        )}
+        errors={errors}
+        name="email"
+      />
+    </>
+  )
+}
+
+function _PasswordInput() {
+  const {
+    register,
+    formState: { isSubmitting, errors },
+  } = useFormContext()
+  return (
+    <>
+      <PasswordInput
+        label="Password"
+        disabled={isSubmitting}
+        placeholder="Your password"
+        mt="md"
+        size="md"
+        {...register("password", { required: "Password is required" })}
+      />
+      <ErrorMessage
+        render={({ message }) => (
+          <div role="alert" style={{ color: "red" }}>
+            {message}
+          </div>
+        )}
+        errors={errors}
+        name="password"
+      />
+    </>
+  )
+}
+
+export default function SignupForm(props: SignupFormProps) {
+  const [signupMutation] = useMutation(signup)
+  const { classes } = useStyles()
+  return (
+    <div className={classes.wrapper}>
+      <Paper className={classes.form} radius={0} p={30}>
+        <Back url={Routes.Index()} text="Back To Home Page"/>
+        <Title order={2} className={classes.title} align="center" mt="md" pt={30}>
+          Welcome! New Here?
+        </Title>
+        <Text color="dimmed" size="sm" align="center" pt={10} mb={50}>
+          Continue to the dashboard after creating an account
+        </Text>
+        <Form
         schema={Signup}
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
@@ -32,11 +144,17 @@ export const SignupForm = (props: SignupFormProps) => {
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-      </Form>
+          <EmailInput />
+          <_PasswordInput />
+          <Button fullWidth mt="xl" size="md" type="submit">
+            Register
+          </Button>
+        </Form>
+        <Text align="center" mt="md">
+          Already Have an account? <Link href={Routes.LoginPage()}>Go to Login</Link>
+        </Text>
+      </Paper>
     </div>
   )
 }
 
-export default SignupForm
