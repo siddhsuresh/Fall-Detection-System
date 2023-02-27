@@ -74,7 +74,7 @@ export default function Index() {
                     borderRadius: "20px",
                   }}
                   onClick={() => {
-                    window.open("https://github.com/siddhsuresh/Cloud-Project-Frontend")
+                    window.open("https://github.com/siddhsuresh/Fall-Detection-System")
                   }}
                 >
                   <svg
@@ -97,7 +97,7 @@ export default function Index() {
                     borderRadius: "20px",
                   }}
                   onClick={() => {
-                    window.open("https://github.com/siddhsuresh/Cloud-Project-Backend")
+                    window.open("https://github.com/siddhsuresh/Fall-Detection-System")
                   }}
                 >
                   <svg
