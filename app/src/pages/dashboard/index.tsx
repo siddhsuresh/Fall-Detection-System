@@ -81,7 +81,7 @@ export default DashboardPage
 import { createStyles, Title, Text, Container } from "@mantine/core"
 import { Badge } from "@mantine/core"
 
-const useStyles = createStyles((theme) => ({
+export const useStyles = createStyles((theme) => ({
   wrapper: {
     position: "relative",
     paddingTop: 120,
