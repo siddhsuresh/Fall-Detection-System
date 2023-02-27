@@ -153,9 +153,9 @@ function convertRadiansToDegrees(radians) {
 
 function animate() {
     let viewRotation = new Zdog.Vector();
-    let x = document.getElementById("x").innerText;
-    let y = document.getElementById("y").innerText;
-    let z = document.getElementById("z").innerText;
+    let x = document.getElementById("x") ? document.getElementById("x").innerText : "" ;
+    let y = document.getElementById("y") ? document.getElementById("y").innerText : "";
+    let z = document.getElementById("z") ? document.getElementById("z").innerText : "";
     viewRotation.x = convertRadiansToDegrees( x);
     viewRotation.y = convertRadiansToDegrees( y);
     viewRotation.z = convertRadiansToDegrees( z);
