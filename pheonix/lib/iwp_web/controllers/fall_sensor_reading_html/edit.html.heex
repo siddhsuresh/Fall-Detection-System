@@ -1,0 +1,8 @@
+<.header>
+  Edit Fall sensor reading <%= @fall_sensor_reading.id %>
+  <:subtitle>Use this form to manage fall_sensor_reading records in your database.</:subtitle>
+</.header>
+
+<.fall_sensor_reading_form changeset={@changeset} action={~p"/fall_sensor_readings/#{@fall_sensor_reading}"} />
+
+<.back navigate={~p"/fall_sensor_readings"}>Back to fall_sensor_readings</.back>

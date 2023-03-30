@@ -5,7 +5,7 @@ config :iwp, Iwp.Repo,
   username: "myuser",
   password: "mypass",
   hostname: "localhost",
-  database: "iwp_dev",
+  database: "iwp_dev_phx_",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

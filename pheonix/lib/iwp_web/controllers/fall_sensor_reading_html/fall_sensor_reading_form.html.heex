@@ -1,0 +1,15 @@
+<.simple_form :let={f} for={@changeset} action={@action}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+  <.input field={f[:accX]} type="number" label="Accx" step="any" />
+  <.input field={f[:accY]} type="number" label="Accy" step="any" />
+  <.input field={f[:accZ]} type="number" label="Accz" step="any" />
+  <.input field={f[:gyX]} type="number" label="Gyx" step="any" />
+  <.input field={f[:gyY]} type="number" label="Gyy" step="any" />
+  <.input field={f[:gyZ]} type="number" label="Gyz" step="any" />
+  <.input field={f[:fall?]} type="checkbox" label="Fall?" />
+  <:actions>
+    <.button>Save Fall sensor reading</.button>
+  </:actions>
+</.simple_form>

@@ -1,0 +1,29 @@
+<.header>
+  Listing Fall sensor readings
+  <:actions>
+    <.link href={~p"/fall_sensor_readings/new"}>
+      <.button>New Fall sensor reading</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="fall_sensor_readings" rows={@fall_sensor_readings} row_click={&JS.navigate(~p"/fall_sensor_readings/#{&1}")}>
+  <:col :let={fall_sensor_reading} label="Accx"><%= fall_sensor_reading.accX %></:col>
+  <:col :let={fall_sensor_reading} label="Accy"><%= fall_sensor_reading.accY %></:col>
+  <:col :let={fall_sensor_reading} label="Accz"><%= fall_sensor_reading.accZ %></:col>
+  <:col :let={fall_sensor_reading} label="Gyx"><%= fall_sensor_reading.gyX %></:col>
+  <:col :let={fall_sensor_reading} label="Gyy"><%= fall_sensor_reading.gyY %></:col>
+  <:col :let={fall_sensor_reading} label="Gyz"><%= fall_sensor_reading.gyZ %></:col>
+  <:col :let={fall_sensor_reading} label="Fall?"><%= fall_sensor_reading.fall? %></:col>
+  <:action :let={fall_sensor_reading}>
+    <div class="sr-only">
+      <.link navigate={~p"/fall_sensor_readings/#{fall_sensor_reading}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/fall_sensor_readings/#{fall_sensor_reading}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={fall_sensor_reading}>
+    <.link href={~p"/fall_sensor_readings/#{fall_sensor_reading}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

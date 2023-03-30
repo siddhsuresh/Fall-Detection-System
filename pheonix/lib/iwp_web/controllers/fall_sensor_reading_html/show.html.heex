@@ -1,0 +1,21 @@
+<.header>
+  Fall sensor reading <%= @fall_sensor_reading.id %>
+  <:subtitle>This is a fall_sensor_reading record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/fall_sensor_readings/#{@fall_sensor_reading}/edit"}>
+      <.button>Edit fall_sensor_reading</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Accx"><%= @fall_sensor_reading.accX %></:item>
+  <:item title="Accy"><%= @fall_sensor_reading.accY %></:item>
+  <:item title="Accz"><%= @fall_sensor_reading.accZ %></:item>
+  <:item title="Gyx"><%= @fall_sensor_reading.gyX %></:item>
+  <:item title="Gyy"><%= @fall_sensor_reading.gyY %></:item>
+  <:item title="Gyz"><%= @fall_sensor_reading.gyZ %></:item>
+  <:item title="Fall?"><%= @fall_sensor_reading.fall? %></:item>
+</.list>
+
+<.back navigate={~p"/fall_sensor_readings"}>Back to fall_sensor_readings</.back>
