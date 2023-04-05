@@ -4,6 +4,8 @@ import { useRouter } from "next/router"
 import { Anchor, Center, Box } from "@mantine/core"
 import { FooterCentered } from "src/core/components/Footer"
 import { HeaderCentered } from "src/core/components/Header"
+import { useEffect, useState } from "react"
+import { io } from 'socket.io-client';
 
 export function Front({ url, text }) {
   const router = useRouter()
@@ -39,6 +41,43 @@ export function Front({ url, text }) {
 }
 
 export default function Index() {
+  const socket = io("http://localhost:3001");
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [fooEvents, setFooEvents] = useState([]);
+
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+    function onDataEvent(value) {
+      console.log("Data")
+      console.log(value)
+      //@ts-ignore
+      setFooEvents(previous => [...previous, value]);
+    }
+    function onPredictEvent(value) {
+      console.log("Prediction")
+      console.log(value)
+      //@ts-ignore
+      setFooEvents(previous => [...previous, value]);
+    }
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('data', onDataEvent);
+    socket.on('prediction', onPredictEvent);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.off('data', onDataEvent);
+      socket.off('prediction', onPredictEvent);
+    };
+  }, []);
   return (
     <div className={styles.container}>
       <Head>

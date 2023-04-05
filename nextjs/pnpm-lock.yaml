@@ -53,6 +53,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-hook-form: 7.43.1
+  react-use-websocket: 4.3.1
   secure-password: 4.0.0
   socket.io: 4.6.1
   socket.io-client: 4.6.1
@@ -91,6 +92,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.43.1_react@18.2.0
+  react-use-websocket: 4.3.1_biqbaboplfbrettd7655fr4n2y
   secure-password: 4.0.0
   socket.io: 4.6.1
   socket.io-client: 4.6.1
@@ -9070,6 +9072,16 @@ packages:
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-use-websocket/4.3.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-zHPLWrgcqydJaak2O5V9hiz4q2dwkwqNQqpgFVmSuPxLZdsZlnDs8DVHy3WtHH+A6ms/8aHIyX7+7ulOcrnR0Q==}
+    peerDependencies:
+      react: '>= 18.0.0'
+      react-dom: '>= 18.0.0'
+    dependencies:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false

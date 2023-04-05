@@ -8,9 +8,13 @@ defmodule IwpWeb.Router do
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {IwpWeb.Layouts, :root}
-    plug :protect_from_forgery
+    # plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+  end
+
+  pipeline :csrf do
+    plug :protect_from_forgery # to here
   end
 
   pipeline :api do
@@ -18,11 +22,12 @@ defmodule IwpWeb.Router do
   end
 
   scope "/", IwpWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", PageController, :home
 
     resources "/fall_sensor_readings", FallSensorReadingController
+
   end
 
   # Other scopes may use custom stacks.
@@ -61,6 +66,7 @@ defmodule IwpWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
+
   end
 
   scope "/", IwpWeb do
@@ -71,6 +77,7 @@ defmodule IwpWeb.Router do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
+
   end
 
   scope "/", IwpWeb do

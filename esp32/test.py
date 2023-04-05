@@ -37,6 +37,10 @@ THE SOFTWARE.
 # At runtime try to continue returning last good data value. We don't want aircraft
 # crashing. However if the I2C has crashed we're probably stuffed.
 
+import machine
+import gc
+from random_forest import RandomForestClassifier
+import ujson
 from machine import I2C, Pin
 from machine import Timer
 import json
@@ -607,14 +611,13 @@ def set_frequency():
 # link IMU to the i2C bus
 imu = MPU6050(i2c)
 
-import ujson
 
 l = {
     "acc": [],
     "gyro": []
 }
 
-import gc 
+
 def data_collected(timer):
     x = imu.accel.x
     y = imu.accel.y
@@ -623,6 +626,18 @@ def data_collected(timer):
     yg = imu.gyro.y
     zg = imu.gyro.z
     # serialize data
+    # data = ujson.dumps(
+    #     {
+    #         body: {
+    #             "acc_x": x,
+    #             "acc_y": y,
+    #             "acc_z": z,
+    #             "gyro_x": xg,
+    #             "gyro_y": yg,
+    #             "gyro_z": zg
+    #         }
+    #     }
+    # )
     data = ujson.dumps(
         {
             "acc_x": x,
@@ -631,8 +646,13 @@ def data_collected(timer):
             "gyro_x": xg,
             "gyro_y": yg,
             "gyro_z": zg
-            }
+        }
     )
+    # wrap the data in body
+    data = ujson.dumps({"body":
+                        ujson.loads(data)
+                        })
+    print(data)
     # append data to the list
     l["acc"].append(abs(x))
     l["gyro"].append(abs(xg))
@@ -641,14 +661,15 @@ def data_collected(timer):
     l["acc"].append(abs(z))
     l["gyro"].append(abs(zg))
     gc.collect()
-    #send the data to the server using the POST method to 192.168.1.102:3001/store
-    urequests.post("http://192.168.217.62:3001/store", headers = {'content-type': 'application/json'}, data=data)
-    
-import machine
+    # send the data to the server using the POST method to 192.168.1.102:3001/store
+    c = urequests.post("http://192.168.217.62:3001/store",
+                       headers={'content-type': 'application/json'}, data=data).json()
+    print(c)
+
+
 timer = machine.Timer(1)
 timer2 = machine.Timer(2)
 
-from random_forest import RandomForestClassifier
 
 def predict(timer):
     acc_max = max(l["acc"])
@@ -666,12 +687,13 @@ def predict(timer):
     lin_acc_max = max(lin_acc)
     post_acc_max = max(acc)
 
-    pred = RandomForestClassifier.predict([[acc_max, acc_kurtosis, gyro_kurtosis,lin_acc_max, acc_skewness, gyro_skewness, post_gyro_max, post_acc_max]])
+    pred = RandomForestClassifier.predict(
+        [[acc_max, acc_kurtosis, gyro_kurtosis, lin_acc_max, acc_skewness, gyro_skewness, post_gyro_max, post_acc_max]])
     print("Predicted: ", pred)
     l["acc"] = []
     l["gyro"] = []
     gc.collect()
-    #send the data to the server using the POST method to
+    # send the data to the server using the POST method to
     data = ujson.dumps(
         {
             "acc_max": acc_max,
@@ -685,24 +707,31 @@ def predict(timer):
             "prediction": pred
         }
     )
-    c = urequests.post("http://192.168.217.62:3001/prediction", headers = {'content-type': 'application/json'}, data=data).json()
+    c = urequests.post("http://192.168.217.62:3001/prediction",
+                       headers={'content-type': 'application/json'}, data=data).json()
     print(c)
+
 
 def mean(x):
     return sum(x) / len(x)
 
+
 def std(x):
     return (sum((x - mean(x)) ** 2) / (len(x) - 1)) ** 0.5
+
 
 def skewness(x):
     return sum((x - mean(x)) ** 3) / (len(x) * std(x) ** 3)
 
+
 def kurtosis(x):
     return sum((x - mean(x)) ** 4) / (len(x) * std(x) ** 4) - 3
-    
+
+
 if __name__ == '__main__':
     do_connect()
     sync_time()
     set_frequency()
     gc.collect()
-    timer.init(period=250, mode=machine.Timer.PERIODIC, callback=data_collected)
+    timer.init(period=200, mode=machine.Timer.PERIODIC,
+               callback=data_collected)

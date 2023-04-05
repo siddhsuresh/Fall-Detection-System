@@ -609,13 +609,8 @@ imu = MPU6050(i2c)
 
 import ujson
 
-l = {
-    "acc": [],
-    "gyro": []
-}
-
 import gc 
-def data_collected(timer):
+def data_collected():
     x = imu.accel.x
     y = imu.accel.y
     z = imu.accel.z
@@ -631,78 +626,18 @@ def data_collected(timer):
             "gyro_x": xg,
             "gyro_y": yg,
             "gyro_z": zg
-            }
-    )
-    # append data to the list
-    l["acc"].append(abs(x))
-    l["gyro"].append(abs(xg))
-    l["acc"].append(abs(y))
-    l["gyro"].append(abs(yg))
-    l["acc"].append(abs(z))
-    l["gyro"].append(abs(zg))
-    gc.collect()
-    #send the data to the server using the POST method to 192.168.1.102:3001/store
-    urequests.post("http://192.168.217.62:3001/store", headers = {'content-type': 'application/json'}, data=data)
-    
-import machine
-timer = machine.Timer(1)
-timer2 = machine.Timer(2)
-
-from random_forest import RandomForestClassifier
-
-def predict(timer):
-    acc_max = max(l["acc"])
-    acc_kurtosis = kurtosis(l["acc"])
-    acc_skewness = skewness(l["acc"])
-    gyro_kurtosis = kurtosis(l["gyro"])
-    gyro_skewness = skewness(l["gyro"])
-    # take the last 3 values of the each list
-    gyro = l["gyro"][-3:]
-    acc = l["acc"][-3:]
-    acc = [x for i, x in enumerate(acc) if i % 3 != 0]
-    post_gyro_max = max(gyro)
-    # remove every 3rd element from the list
-    lin_acc = [x for i, x in enumerate(l["acc"]) if i % 3 != 0]
-    lin_acc_max = max(lin_acc)
-    post_acc_max = max(acc)
-
-    pred = RandomForestClassifier.predict([[acc_max, acc_kurtosis, gyro_kurtosis,lin_acc_max, acc_skewness, gyro_skewness, post_gyro_max, post_acc_max]])
-    print("Predicted: ", pred)
-    l["acc"] = []
-    l["gyro"] = []
-    gc.collect()
-    #send the data to the server using the POST method to
-    data = ujson.dumps(
-        {
-            "acc_max": acc_max,
-            "acc_kurtosis": acc_kurtosis,
-            "acc_skewness": acc_skewness,
-            "gyro_kurtosis": gyro_kurtosis,
-            "gyro_skewness": gyro_skewness,
-            "post_gyro_max": post_gyro_max,
-            "lin_acc_max": lin_acc_max,
-            "post_acc_max": post_acc_max,
-            "prediction": pred
         }
     )
-    c = urequests.post("http://192.168.217.62:3001/prediction", headers = {'content-type': 'application/json'}, data=data).json()
-    print(c)
-
-def mean(x):
-    return sum(x) / len(x)
-
-def std(x):
-    return (sum((x - mean(x)) ** 2) / (len(x) - 1)) ** 0.5
-
-def skewness(x):
-    return sum((x - mean(x)) ** 3) / (len(x) * std(x) ** 3)
-
-def kurtosis(x):
-    return sum((x - mean(x)) ** 4) / (len(x) * std(x) ** 4) - 3
+    print(data)
+    gc.collect()
+    #send the data to the server using the POST method to 192.168.1.102:3001/store
+    res = urequests.post("http://192.168.217.62:3001/store", headers = {'content-type': 'application/json'}, data=data).json()
+    print(res)
     
 if __name__ == '__main__':
     do_connect()
     sync_time()
     set_frequency()
     gc.collect()
-    timer.init(period=250, mode=machine.Timer.PERIODIC, callback=data_collected)
+    data_collected()
+
