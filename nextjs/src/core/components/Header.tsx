@@ -53,7 +53,7 @@ export function HeaderCentered() {
       <div className={classes.inner}>
         <Group spacing="xs" noWrap>
             <Text size="md" weight={500}>
-                IWP Review 02
+                Final Review
             </Text>
         </Group>
         <Group className={classes.links}>{items}</Group>

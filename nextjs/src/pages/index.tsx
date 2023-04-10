@@ -93,7 +93,7 @@ export default function Index() {
                 Fall Detection System
               </p>
               <p className="mt-6 flex max-w-lg flex-col items-center text-center text-2xl font-semibold ">
-                CSE3002 Internet and Web Programming <br />J Component
+                CSE3076 Context-Aware Computing <br />J Component
               </p>
               <div className="mt-6 flex max-w-lg flex-col items-center text-center text-3xl font-semibold">
                 Presented By <br />
@@ -101,6 +101,7 @@ export default function Index() {
                   <p className="text-xl">Siddharth Suresh 20BPS1042</p>
                   <p className="text-xl">Prantik Dhara 20BPS1083</p>
                   <p className="text-xl">Kanishka Ghosh 20BPS1125</p>
+                  <p className="text-xl">Siddharth M 20BPS1007</p>
                 </div>
               </div>
               <div className="p-5 flex flex-row gap-5 w-xl justify-between">
